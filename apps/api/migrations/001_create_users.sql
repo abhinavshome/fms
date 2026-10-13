@@ -1,0 +1,10 @@
+-- up
+CREATE TABLE users (
+  id serial PRIMARY KEY,
+  name text NOT NULL,
+  email text NOT NULL UNIQUE,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- down
+DROP TABLE users;

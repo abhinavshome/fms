@@ -1,0 +1,13 @@
+{
+  "name": "fms",
+  "private": true,
+  "packageManager": "pnpm@10.15.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @fms/api --filter @fms/ui dev",
+    "build": "pnpm --recursive build",
+    "migrate:up": "pnpm --filter @fms/api migrate:up",
+    "migrate:down": "pnpm --filter @fms/api migrate:down",
+    "migrate:status": "pnpm --filter @fms/api migrate:status",
+    "user:seed": "pnpm --filter @fms/api user:seed"
+  }
+}
