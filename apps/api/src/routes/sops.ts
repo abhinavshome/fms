@@ -5,10 +5,30 @@ import { z } from "zod";
 export function createSopsRouter() {
   const router = Router();
 
-  router.get("/", async (_request, response) => {
+  router.get("/", async (_, res) => {
     const sops = await db.manyOrNone("SELECT * FROM sops");
-    response.json(sops);
+    res.json(sops);
   });
+
+  router.get("/:id", async (req, res) => {
+    const id = req.params.id;
+    const dbRes = await db.one(`
+      SELECT s.*, r.name as accountability, STRING_AGG(r1.name, ', ') as resposibilities
+      FROM 
+        sops s 
+        INNER JOIN roles r 
+        ON s.accountability_role_id = r.id 
+        INNER JOIN sop_responsibilities sr 
+        ON s.id = sr.sop_id
+        INNER JOIN roles r1
+        ON sr.role_id = r1.id
+      WHERE s.id = $1
+      GROUP BY s.id, r.name
+      `, id)
+      
+      ;
+    res.send(dbRes);    
+  })
 
   router.post("/", async (req, res) => {
     try {
